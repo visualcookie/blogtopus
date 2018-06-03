@@ -80,7 +80,9 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  AuthenticationService.request();
+  if (store.getters.hasToken) {
+    AuthenticationService.request();
+  }
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters.hasToken) {
