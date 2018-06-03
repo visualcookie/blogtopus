@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     <vk-grid class="uk-flex-center">
-      <div class="uk-width-1-2@m" v-for="post in posts" v-bind:key="post.id">
+      <p class="uk-text-muted" v-if="!posts">There are no posts yet.</p>
+      <div class="uk-width-1-2@m" v-for="post in posts" v-bind:key="post.id" v-if="posts">
         <vk-card>
           <div slot="header">
             <vk-grid gutter="small" class="uk-flex-middle">
@@ -24,29 +25,22 @@
 </template>
 
 <script>
-import PostService from "@/services/PostService";
+import { mapGetters } from "vuex";
 
 export default {
   name: "home",
-  data() {
-    return {
-      posts: null,
-      errors: null
-    };
-  },
-  beforeMount() {
-    this.getPosts();
+  computed: {
+    ...mapGetters({
+      posts: "hasPosts"
+    })
   },
   methods: {
-    async getPosts() {
-      try {
-        const getPosts = await PostService.listPosts();
-        this.posts = getPosts.data;
-      } catch (error) {
-        console.log(error);
-        this.errors = error.response.data.error;
-      }
+    listPosts() {
+      this.$store.dispatch("setPosts");
     }
+  },
+  beforeMount() {
+    this.listPosts();
   }
 };
 </script>

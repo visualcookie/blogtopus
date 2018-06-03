@@ -1,10 +1,10 @@
 <template>
   <div class="post-list">
     <h1>Posts</h1>
-    <div class="uk-alert uk-alert-primary" uk-alert v-if="posts.length === 0">
-      <p>Nothing to display here, since there are no Posts yet.</p>
+    <div class="uk-alert uk-alert-primary" uk-alert v-if="!posts">
+      <p>There are no posts yet.</p>
     </div>
-    <vk-table responsive :data="posts" v-if="posts.length >= 1">
+    <vk-table responsive :data="posts" v-if="posts">
       <vk-table-column title="Title" cell="title" expanded truncated></vk-table-column>
       <vk-table-column title="Date" cell="created_at">
         <template slot-scope="{ cell }">{{ cell | formatDate }}</template>
@@ -23,32 +23,25 @@
 </template>
 
 <script>
-import PostService from "@/services/PostService";
+import { mapGetters } from "vuex";
 
 export default {
   name: "postlist",
-  data() {
-    return {
-      posts: null,
-      errors: null
-    };
-  },
-  beforeMount() {
-    this.getPosts();
+  computed: {
+    ...mapGetters({
+      posts: "hasPosts"
+    })
   },
   methods: {
-    async getPosts() {
-      try {
-        const getPosts = await PostService.listPosts();
-        this.posts = getPosts.data;
-      } catch (error) {
-        console.log(error);
-        this.errors = error.response.data.error;
-      }
+    listPosts() {
+      this.$store.dispatch("setPosts");
     },
     editPost(id) {
       this.$router.push({ name: "dashboard.post.edit", params: { id } });
     }
+  },
+  beforeMount() {
+    this.listPosts();
   }
 };
 </script>
