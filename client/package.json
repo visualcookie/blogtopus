@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "@vuikit/icons": "^0.8.1",
@@ -18,7 +20,8 @@
     "vue2-editor": "^2.4.4",
     "vuex": "^3.0.1",
     "vuex-persist": "^1.2.2",
-    "vuikit": "^0.8.4"
+    "vuikit": "^0.8.4",
+    "snyk": "^1.161.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.11",
@@ -33,5 +36,6 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "snyk": true
 }
